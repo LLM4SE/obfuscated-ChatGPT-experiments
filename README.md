@@ -1,6 +1,6 @@
 # Replication Package *Breaking the Silence: the Threats of Using LLMs in Software Engineering*
 
-This repository encompasses the replication package associated with the research paper titled "Breaking the Silence: Unveiling Threats in the Application of Large Language Models (LLMs) in Software Engineering." The primary objective of this paper is to conduct a concise study elucidating certain limitations inherent in LLM-based research, along with offering exemplar strategies for their mitigation.
+This repository encompasses the replication package associated with the research paper titled "Breaking the Silence: Unveiling Threats in the Application of Large Language Models (LLMs) in Software Engineering." The primary objective of this paper is to conduct a concise study elucidating certain limitations inherent in LLM-based research, along with offering guidelines (https://github.com/LLM4SE/guidelines) and example for their mitigation.
 
 ## Study Methodology
 
