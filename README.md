@@ -10,6 +10,8 @@ To execute our study, we leverage the capabilities of the software available at 
 
 The unprocessed outcomes of this experimental endeavor are conveniently housed in the `experiment-data/` directory.
 
+The file `experiment-data/test-results.csv` contains the test execution results of the test genererated by ChatGPT.
+
 Each file within `experiment-data/queries/<project>-<bug-id>/info-<timestamp>.json` encapsulates the details of an individual iteration. For every iteration, comprehensive results are documented, including the date, prompt, Defects4J information, and ChatGPT responses. Both unobfuscated and obfuscated code scenarios are considered for a thorough evaluation of the model's performance.
 
 Result structrure: 

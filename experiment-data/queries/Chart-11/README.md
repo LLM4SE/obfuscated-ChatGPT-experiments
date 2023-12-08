@@ -1,9 +1,9 @@
 <table>
   <thead>
     <tr>
-      <th width="500px">Iteration</th>
-      <th width="500px">Orriginal</th>
-      <th width="500px">Obfuscated</th>
+      <th width="100px">Iteration</th>
+      <th width="500px">Original</th>
+      <th width="500px">Mutated</th>
     </tr>
   </thead>
   <tbody>
