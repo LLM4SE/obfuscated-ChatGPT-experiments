@@ -1,0 +1,63 @@
+{
+  "date": "2023-12-03 20:19:43",
+  "bug": {
+    "bugId": 11,
+    "changedFiles": {
+      "org/jfree/chart/util/ShapeUtilities.java": {
+        "changes": [
+          [
+            275
+          ]
+        ]
+      }
+    },
+    "diff": "--- a/source/org/jfree/chart/util/ShapeUtilities.java\n+++ b/source/org/jfree/chart/util/ShapeUtilities.java\n@@ -272,7 +272,7 @@ public static boolean equal(GeneralPath p1, GeneralPath p2) {\n             return false;\n         }\n         PathIterator iterator1 = p1.getPathIterator(null);\n-        PathIterator iterator2 = p1.getPathIterator(null);\n+        PathIterator iterator2 = p2.getPathIterator(null);\n         double[] d1 = new double[6];\n         double[] d2 = new double[6];\n         boolean done = iterator1.isDone() && iterator2.isDone();\n",
+    "failingTests": [
+      {
+        "className": " org.jfree.chart.util.junit.ShapeUtilitiesTests",
+        "error": "junit.framework.AssertionFailedError",
+        "message": "",
+        "methodName": "testEqualGeneralPaths"
+      }
+    ],
+    "metrics": {
+      "chunks": 1,
+      "classes": 1,
+      "files": 1,
+      "linesAdd": 0,
+      "linesMod": 1,
+      "linesRem": 0,
+      "methods": 1,
+      "sizeInLines": 1,
+      "spreadAllLines": 0,
+      "spreadCodeOnly": 0
+    },
+    "observations": "Replaces var referencing of target object of a call.",
+    "program": "jfreechart",
+    "project": "Chart",
+    "repairActions": [
+      "assignExpChange",
+      "varReplVar"
+    ],
+    "repairPatterns": [
+      "singleLine",
+      "wrongComp",
+      "wrongVarRef"
+    ],
+    "repairTools": [
+      "rtCardumen",
+      "rtElixir"
+    ],
+    "revisionId": "1025"
+  },
+  "original_prompt": "Generate unit tests method for the following code. The tests need to cover all branches and statements. The tests should be as small as possible and pass.\n\n## Code:\n\n```java\n/**\n * Tests two polygons for equality.  If both are <code>null</code> this\n * method returns <code>true</code>.\n *\n * @param p1\n * \t\tpath 1 (<code>null</code> permitted).\n * @param p2\n * \t\tpath 2 (<code>null</code> permitted).\n * @return A boolean.\n */\npublic static boolean equal(GeneralPath vm, GeneralPath gt) {\n    if (vm == null) {\n        return gt == null;\n    }\n    if (gt == null) {\n        return false;\n    }\n    if (vm.getWindingRule() != gt.getWindingRule()) {\n        return false;\n    }\n    PathIterator iterator1 = vm.getPathIterator(null);\n    PathIterator iterator2 = vm.getPathIterator(null);\n    double[] d1 = new double[6];\n    double[] d2 = new double[6];\n    boolean done = iterator1.isDone() && iterator2.isDone();\n    while (!done) {\n        if (iterator1.isDone() != iterator2.isDone()) {\n            return false;\n        }\n        int seg1 = iterator1.currentSegment(d1);\n        int seg2 = iterator2.currentSegment(d2);\n        if (seg1 != seg2) {\n            return false;\n        }\n        if (!Arrays.equals(d1, d2)) {\n            return false;\n        }\n        iterator1.next();\n        iterator2.next();\n        done = iterator1.isDone() && iterator2.isDone();\n    } \n    return true;\n}\n\n```\n",
+  "obfuscated_prompt": "Generate unit tests method for the following code. The tests need to cover all branches and statements. The tests should be as small as possible and pass.\n\n## Code:\n\n```java\npublic static boolean equal(GeneralPath p1, GeneralPath p2) {\n    if (p1 == null) {\n        return p2 == null;\n    }\n    if (p2 == null) {\n        return false;\n    }\n    if (p1.getWindingRule() != p2.getWindingRule()) {\n        return false;\n    }\n    PathIterator iterator1 = p1.getPathIterator(null);\n    PathIterator iterator2 = p1.getPathIterator(null);\n    double[] d1 = new double[6];\n    double[] d2 = new double[6];\n    boolean through = iterator1.isDone() && iterator2.isDone();\n    while (!through) {\n        if (iterator1.isDone() != iterator2.isDone()) {\n            return false;\n        }\n        int seg1 = iterator1.currentSegment(d1);\n        int seg2 = iterator2.currentSegment(d2);\n        if (seg1 != seg2) {\n            return false;\n        }\n        if (!Arrays.equals(d1, d2)) {\n            return false;\n        }\n        iterator1.next();\n        iterator2.next();\n        through = iterator1.isDone() && iterator2.isDone();\n    } \n    return true;\n}\n\n```\n",
+  "original_res": {
+    "response": "Certainly! Here are some unit tests in Java using JUnit that cover different cases and branches of the `equal` method:\n\n```java\nimport org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class PolygonEqualityTest {\n\n    @Test\n    public void testBothNullPolygons() {\n        assertTrue(PolygonUtils.equal(null, null));\n    }\n\n    @Test\n    public void testOnePolygonNull() {\n        GeneralPath path = new GeneralPath();\n        assertFalse(PolygonUtils.equal(path, null));\n        assertFalse(PolygonUtils.equal(null, path));\n    }\n\n    @Test\n    public void testDifferentWindingRules() {\n        GeneralPath path1 = new GeneralPath();\n        GeneralPath path2 = new GeneralPath();\n        path1.setWindingRule(GeneralPath.WIND_EVEN_ODD);\n        path2.setWindingRule(GeneralPath.WIND_NON_ZERO);\n        assertFalse(PolygonUtils.equal(path1, path2));\n    }\n\n    @Test\n    public void testDifferentSegments() {\n        GeneralPath path1 = new GeneralPath();\n        GeneralPath path2 = new GeneralPath();\n        path1.moveTo(1, 1);\n        path2.lineTo(1, 1);\n        assertFalse(PolygonUtils.equal(path1, path2));\n    }\n\n    @Test\n    public void testEqualPolygons() {\n        GeneralPath path1 = new GeneralPath();\n        path1.moveTo(1, 1);\n        path1.lineTo(2, 2);\n\n        GeneralPath path2 = new GeneralPath();\n        path2.moveTo(1, 1);\n        path2.lineTo(2, 2);\n\n        assertTrue(PolygonUtils.equal(path1, path2));\n    }\n}\n```\n\nThese tests cover the following scenarios:\n\n1. Both polygons are null.\n2. One of the polygons is null.\n3. Polygons have different winding rules.\n4. Polygons have different segments.\n5. Polygons are equal.\n\nMake sure to include the appropriate import statements for `GeneralPath` and `Arrays` if not already done in your project. Also, replace `PolygonUtils` with the appropriate class name containing your `equal` method. Adjust the test scenarios as needed based on the specific functionalities and characteristics of the `GeneralPath` class in your project.",
+    "codes": "import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class PolygonEqualityTest {\n\n    @Test\n    public void testBothNullPolygons() {\n        assertTrue(PolygonUtils.equal(null, null));\n    }\n\n    @Test\n    public void testOnePolygonNull() {\n        GeneralPath path = new GeneralPath();\n        assertFalse(PolygonUtils.equal(path, null));\n        assertFalse(PolygonUtils.equal(null, path));\n    }\n\n    @Test\n    public void testDifferentWindingRules() {\n        GeneralPath path1 = new GeneralPath();\n        GeneralPath path2 = new GeneralPath();\n        path1.setWindingRule(GeneralPath.WIND_EVEN_ODD);\n        path2.setWindingRule(GeneralPath.WIND_NON_ZERO);\n        assertFalse(PolygonUtils.equal(path1, path2));\n    }\n\n    @Test\n    public void testDifferentSegments() {\n        GeneralPath path1 = new GeneralPath();\n        GeneralPath path2 = new GeneralPath();\n        path1.moveTo(1, 1);\n        path2.lineTo(1, 1);\n        assertFalse(PolygonUtils.equal(path1, path2));\n    }\n\n    @Test\n    public void testEqualPolygons() {\n        GeneralPath path1 = new GeneralPath();\n        path1.moveTo(1, 1);\n        path1.lineTo(2, 2);\n\n        GeneralPath path2 = new GeneralPath();\n        path2.moveTo(1, 1);\n        path2.lineTo(2, 2);\n\n        assertTrue(PolygonUtils.equal(path1, path2));\n    }\n}\n"
+  },
+  "obfuscated_res": {
+    "response": "To create unit tests that cover all branches and statements for the `equal` method, you'll need to consider various scenarios. Here's a set of unit tests in Java using JUnit to cover different cases:\n\n```java\nimport org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class GeneralPathTest {\n\n    @Test\n    public void testEqual_NullPaths_ReturnsTrue() {\n        assertTrue(GeneralPathUtils.equal(null, null));\n    }\n\n    @Test\n    public void testEqual_FirstNullPath_ReturnsFalse() {\n        GeneralPath p2 = new GeneralPath();\n        assertFalse(GeneralPathUtils.equal(null, p2));\n    }\n\n    @Test\n    public void testEqual_SecondNullPath_ReturnsFalse() {\n        GeneralPath p1 = new GeneralPath();\n        assertFalse(GeneralPathUtils.equal(p1, null));\n    }\n\n    @Test\n    public void testEqual_DifferentWindingRules_ReturnsFalse() {\n        GeneralPath p1 = new GeneralPath();\n        GeneralPath p2 = new GeneralPath();\n        p1.setWindingRule(GeneralPath.WIND_EVEN_ODD);\n        p2.setWindingRule(GeneralPath.WIND_NON_ZERO);\n        assertFalse(GeneralPathUtils.equal(p1, p2));\n    }\n\n    @Test\n    public void testEqual_SamePaths_ReturnsTrue() {\n        GeneralPath p1 = new GeneralPath();\n        p1.moveTo(1, 1);\n        p1.lineTo(2, 2);\n        GeneralPath p2 = new GeneralPath();\n        p2.moveTo(1, 1);\n        p2.lineTo(2, 2);\n        assertTrue(GeneralPathUtils.equal(p1, p2));\n    }\n\n    @Test\n    public void testEqual_DifferentPaths_ReturnsFalse() {\n        GeneralPath p1 = new GeneralPath();\n        p1.moveTo(1, 1);\n        p1.lineTo(2, 2);\n        GeneralPath p2 = new GeneralPath();\n        p2.moveTo(1, 1);\n        p2.lineTo(3, 3); // Different path\n        assertFalse(GeneralPathUtils.equal(p1, p2));\n    }\n}\n```\n\nEnsure you have JUnit included in your project to run these tests. These tests cover various scenarios like both paths being null, different winding rules, identical paths, and different paths. You might need to adjust these tests based on the actual behavior and requirements of the `GeneralPath` class in your environment.",
+    "codes": "import org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.*;\n\npublic class GeneralPathTest {\n\n    @Test\n    public void testEqual_NullPaths_ReturnsTrue() {\n        assertTrue(GeneralPathUtils.equal(null, null));\n    }\n\n    @Test\n    public void testEqual_FirstNullPath_ReturnsFalse() {\n        GeneralPath p2 = new GeneralPath();\n        assertFalse(GeneralPathUtils.equal(null, p2));\n    }\n\n    @Test\n    public void testEqual_SecondNullPath_ReturnsFalse() {\n        GeneralPath p1 = new GeneralPath();\n        assertFalse(GeneralPathUtils.equal(p1, null));\n    }\n\n    @Test\n    public void testEqual_DifferentWindingRules_ReturnsFalse() {\n        GeneralPath p1 = new GeneralPath();\n        GeneralPath p2 = new GeneralPath();\n        p1.setWindingRule(GeneralPath.WIND_EVEN_ODD);\n        p2.setWindingRule(GeneralPath.WIND_NON_ZERO);\n        assertFalse(GeneralPathUtils.equal(p1, p2));\n    }\n\n    @Test\n    public void testEqual_SamePaths_ReturnsTrue() {\n        GeneralPath p1 = new GeneralPath();\n        p1.moveTo(1, 1);\n        p1.lineTo(2, 2);\n        GeneralPath p2 = new GeneralPath();\n        p2.moveTo(1, 1);\n        p2.lineTo(2, 2);\n        assertTrue(GeneralPathUtils.equal(p1, p2));\n    }\n\n    @Test\n    public void testEqual_DifferentPaths_ReturnsFalse() {\n        GeneralPath p1 = new GeneralPath();\n        p1.moveTo(1, 1);\n        p1.lineTo(2, 2);\n        GeneralPath p2 = new GeneralPath();\n        p2.moveTo(1, 1);\n        p2.lineTo(3, 3); // Different path\n        assertFalse(GeneralPathUtils.equal(p1, p2));\n    }\n}\n"
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "date": "2023-12-05 21:27:38",
+  "bug": {
+    "bugId": 5,
+    "changedFiles": {
+      "org/apache/commons/math3/complex/Complex.java": {
+        "changes": [
+          [
+            305
+          ]
+        ]
+      }
+    },
+    "diff": "--- a/src/main/java/org/apache/commons/math3/complex/Complex.java\n+++ b/src/main/java/org/apache/commons/math3/complex/Complex.java\n@@ -302,7 +302,7 @@ public Complex reciprocal() {\n         }\n \n         if (real == 0.0 && imaginary == 0.0) {\n-            return NaN;\n+            return INF;\n         }\n \n         if (isInfinite) {\n",
+    "failingTests": [
+      {
+        "className": " org.apache.commons.math3.complex.ComplexTest",
+        "error": "junit.framework.AssertionFailedError",
+        "message": "expected:<(NaN, NaN)> but was:<(Infinity, Infinity)>",
+        "methodName": "testReciprocalZero"
+      }
+    ],
+    "metrics": {
+      "chunks": 1,
+      "classes": 1,
+      "files": 1,
+      "linesAdd": 0,
+      "linesMod": 1,
+      "linesRem": 0,
+      "methods": 1,
+      "sizeInLines": 1,
+      "spreadAllLines": 0,
+      "spreadCodeOnly": 0
+    },
+    "observations": "",
+    "program": "commons-math",
+    "project": "Math",
+    "repairActions": [
+      "retExpChange"
+    ],
+    "repairPatterns": [
+      "constChange",
+      "expArithMod",
+      "singleLine"
+    ],
+    "repairTools": [
+      "rtAcs",
+      "rtCardumen",
+      "rtDeepRepair",
+      "rtDynaMoth",
+      "rtElixir",
+      "rtGPFL",
+      "rtGenProg",
+      "rtHDRepair",
+      "rtJAID"
+    ],
+    "revisionId": "e54a1c92302f3167b06bc04859b87ac0681bcdf3"
+  },
+  "original_prompt": "Generate junit tests method for the following code. The tests need to cover all branches and statements. The tests should be as small as possible and pass.\n\n## Code:\n\n```java\n/**\n * {@inheritDoc }\n */\npublic Complex reciprocal() {\n    if (isNaN) {\n        return NaN;\n    }\n    if ((real == 0.0) && (imaginary == 0.0)) {\n        return NaN;\n    }\n    if (isInfinite) {\n        return ZERO;\n    }\n    if (FastMath.abs(real) < FastMath.abs(imaginary)) {\n        double q = real / imaginary;\n        double scale = 1.0 / ((real * q) + imaginary);\n        return createComplex(scale * q, -scale);\n    } else {\n        double q = imaginary / real;\n        double scale = 1.0 / ((imaginary * q) + real);\n        return createComplex(scale, (-scale) * q);\n    }\n}\n\n```\n",
+  "obfuscated_prompt": "Generate junit tests method for the following code. The tests need to cover all branches and statements. The tests should be as small as possible and pass.\n\n## Code:\n\n```java\npublic Complex complementary() {\n    if (isSodiumNorth) {\n        return sodiumNorth;\n    }\n    if ((material == 0.0) && (notional == 0.0)) {\n        return sodiumNorth;\n    }\n    if (isMyriad) {\n        return cipher;\n    }\n    if (FastMath.abs(material) < FastMath.abs(notional)) {\n        double q = material / notional;\n        double plate = 1.0 / ((material * q) + notional);\n        return makeCompound(plate * q, -plate);\n    } else {\n        double q = notional / material;\n        double plate = 1.0 / ((notional * q) + material);\n        return makeCompound(plate, (-plate) * q);\n    }\n}\n\n```\n",
+  "original_res": {
+    "response": "To create JUnit tests for the `reciprocal()` method, we'll aim to cover different branches and conditions. Considering the structure of the code, here's a set of JUnit tests that aim to cover various scenarios:\n\n```java\nimport org.apache.commons.math3.complex.Complex;\nimport org.apache.commons.math3.util.FastMath;\nimport org.junit.Test;\nimport static org.junit.Assert.*;\n\npublic class ComplexTest {\n\n    @Test\n    public void reciprocal_nan() {\n        Complex nanComplex = new Complex(Double.NaN, Double.NaN);\n        Complex result = nanComplex.reciprocal();\n        assertTrue(Double.isNaN(result.getReal()) && Double.isNaN(result.getImaginary()));\n    }\n\n    @Test\n    public void reciprocal_zero_real_imaginary() {\n        Complex zeroComplex = new Complex(0.0, 0.0);\n        Complex result = zeroComplex.reciprocal();\n        assertTrue(Double.isNaN(result.getReal()) && Double.isNaN(result.getImaginary()));\n    }\n\n    @Test\n    public void reciprocal_infinite() {\n        Complex infiniteComplex = new Complex(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);\n        Complex result = infiniteComplex.reciprocal();\n        assertEquals(0.0, result.getReal(), 0.00001);\n        assertEquals(0.0, result.getImaginary(), 0.00001);\n    }\n\n    @Test\n    public void reciprocal_real_less_than_imaginary() {\n        Complex complex = new Complex(2.0, 4.0);\n        Complex result = complex.reciprocal();\n        assertEquals(0.1, result.getReal(), 0.00001);\n        assertEquals(-0.2, result.getImaginary(), 0.00001);\n    }\n\n    @Test\n    public void reciprocal_imaginary_less_than_real() {\n        Complex complex = new Complex(4.0, 2.0);\n        Complex result = complex.reciprocal();\n        assertEquals(0.2, result.getReal(), 0.00001);\n        assertEquals(-0.1, result.getImaginary(), 0.00001);\n    }\n}\n```\n\nThese tests aim to cover the NaN cases, infinite cases, and scenarios where the real part is less than the imaginary part, and vice versa. Adjustments to the test values and assertions might be necessary based on specific implementation details or constraints.",
+    "codes": "import org.apache.commons.math3.complex.Complex;\nimport org.apache.commons.math3.util.FastMath;\nimport org.junit.Test;\nimport static org.junit.Assert.*;\n\npublic class ComplexTest {\n\n    @Test\n    public void reciprocal_nan() {\n        Complex nanComplex = new Complex(Double.NaN, Double.NaN);\n        Complex result = nanComplex.reciprocal();\n        assertTrue(Double.isNaN(result.getReal()) && Double.isNaN(result.getImaginary()));\n    }\n\n    @Test\n    public void reciprocal_zero_real_imaginary() {\n        Complex zeroComplex = new Complex(0.0, 0.0);\n        Complex result = zeroComplex.reciprocal();\n        assertTrue(Double.isNaN(result.getReal()) && Double.isNaN(result.getImaginary()));\n    }\n\n    @Test\n    public void reciprocal_infinite() {\n        Complex infiniteComplex = new Complex(Double.POSITIVE_INFINITY, Double.POSITIVE_INFINITY);\n        Complex result = infiniteComplex.reciprocal();\n        assertEquals(0.0, result.getReal(), 0.00001);\n        assertEquals(0.0, result.getImaginary(), 0.00001);\n    }\n\n    @Test\n    public void reciprocal_real_less_than_imaginary() {\n        Complex complex = new Complex(2.0, 4.0);\n        Complex result = complex.reciprocal();\n        assertEquals(0.1, result.getReal(), 0.00001);\n        assertEquals(-0.2, result.getImaginary(), 0.00001);\n    }\n\n    @Test\n    public void reciprocal_imaginary_less_than_real() {\n        Complex complex = new Complex(4.0, 2.0);\n        Complex result = complex.reciprocal();\n        assertEquals(0.2, result.getReal(), 0.00001);\n        assertEquals(-0.1, result.getImaginary(), 0.00001);\n    }\n}\n"
+  },
+  "obfuscated_res": {
+    "response": "Certainly! To cover all branches and statements in the `complementary()` method, you can write JUnit tests using different scenarios and inputs. Here are some tests that aim to cover the different paths:\n\n```java\nimport org.apache.commons.math3.util.FastMath;\nimport org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.assertEquals;\n\npublic class ComplexTest {\n\n    // Test when isSodiumNorth is true\n    @Test\n    public void testIsSodiumNorth() {\n        Complex sodiumNorth = new Complex(2.0, 3.0);\n        Complex result = new Complex(true, sodiumNorth, 5.0, 7.0, false, null).complementary();\n        assertEquals(sodiumNorth, result);\n    }\n\n    // Test when material and notional are both zero\n    @Test\n    public void testMaterialAndNotionalZero() {\n        Complex sodiumNorth = new Complex(2.0, 3.0);\n        Complex result = new Complex(false, sodiumNorth, 0.0, 0.0, false, null).complementary();\n        assertEquals(sodiumNorth, result);\n    }\n\n    // Test when isMyriad is true\n    @Test\n    public void testIsMyriad() {\n        Complex cipher = new Complex(4.0, 5.0);\n        Complex result = new Complex(false, null, 2.0, 3.0, true, cipher).complementary();\n        assertEquals(cipher, result);\n    }\n\n    // Test when |material| < |notional|\n    @Test\n    public void testMaterialLessThanNotional() {\n        Complex expected = new Complex(2.0, -3.0);\n        Complex result = new Complex(false, null, 2.0, 3.0, false, null).complementary();\n        assertEquals(expected, result);\n    }\n\n    // Test when |material| >= |notional|\n    @Test\n    public void testMaterialGreaterThanOrEqualToNotional() {\n        Complex expected = new Complex(-2.0, 3.0);\n        Complex result = new Complex(false, null, -2.0, 3.0, false, null).complementary();\n        assertEquals(expected, result);\n    }\n    \n    // Additional edge cases or scenarios can be added to further enhance test coverage\n}\n```\n\nThese tests cover different scenarios based on the conditions present in the `complementary()` method, ensuring all branches and statements are exercised. Adjust the test inputs according to the `Complex` class constructor parameters and assertions based on your `makeCompound()` method and expected results.",
+    "codes": "import org.apache.commons.math3.util.FastMath;\nimport org.junit.jupiter.api.Test;\nimport static org.junit.jupiter.api.Assertions.assertEquals;\n\npublic class ComplexTest {\n\n    // Test when isSodiumNorth is true\n    @Test\n    public void testIsSodiumNorth() {\n        Complex sodiumNorth = new Complex(2.0, 3.0);\n        Complex result = new Complex(true, sodiumNorth, 5.0, 7.0, false, null).complementary();\n        assertEquals(sodiumNorth, result);\n    }\n\n    // Test when material and notional are both zero\n    @Test\n    public void testMaterialAndNotionalZero() {\n        Complex sodiumNorth = new Complex(2.0, 3.0);\n        Complex result = new Complex(false, sodiumNorth, 0.0, 0.0, false, null).complementary();\n        assertEquals(sodiumNorth, result);\n    }\n\n    // Test when isMyriad is true\n    @Test\n    public void testIsMyriad() {\n        Complex cipher = new Complex(4.0, 5.0);\n        Complex result = new Complex(false, null, 2.0, 3.0, true, cipher).complementary();\n        assertEquals(cipher, result);\n    }\n\n    // Test when |material| < |notional|\n    @Test\n    public void testMaterialLessThanNotional() {\n        Complex expected = new Complex(2.0, -3.0);\n        Complex result = new Complex(false, null, 2.0, 3.0, false, null).complementary();\n        assertEquals(expected, result);\n    }\n\n    // Test when |material| >= |notional|\n    @Test\n    public void testMaterialGreaterThanOrEqualToNotional() {\n        Complex expected = new Complex(-2.0, 3.0);\n        Complex result = new Complex(false, null, -2.0, 3.0, false, null).complementary();\n        assertEquals(expected, result);\n    }\n    \n    // Additional edge cases or scenarios can be added to further enhance test coverage\n}\n"
+  }
+}
